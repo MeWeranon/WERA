@@ -28,6 +28,30 @@ def get_country_id(id):
     return jsonify(data)
 
 
+#Patch
+@app.route('/country/<id>', methods=["PATCH"])
+def patch_country(id: int):
+    country = _find_next_id(id)
+    if country is None:
+        return jsonify({'error':'Country not found!'}),404
+
+    updated_country = json.loads(request.data)
+    country.update(updated_country)
+    return jsonify(countries)
+
+
+#Delete
+@app.route('/country/<id>', methods = ['DELETE'])
+def delete_country(id):
+
+    data = _find_next_id(id)
+    if not data:
+        return {"error": "Country not found"}, 404
+    else:
+        countries.remove(data[0]) 
+        return "Country deleted succuessfully" ,200
+
+
 @app.route('/country', methods=['POST'])
 def post_country():
     id = request.form.get('id')
